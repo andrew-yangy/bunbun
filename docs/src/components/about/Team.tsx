@@ -17,7 +17,6 @@ import ROUTES from 'docs/src/route';
 import Section from 'docs/src/layouts/Section';
 import SectionHeadline from 'docs/src/components/typography/SectionHeadline';
 import GradientText from 'docs/src/components/typography/GradientText';
-import teamMembers from 'docs/data/about/teamMembers.json';
 
 interface Profile {
   name: string;
@@ -338,22 +337,6 @@ export default function Team() {
             View careers
           </Button>
         </Box>
-        <Grid container spacing={2}>
-          {(teamMembers as Array<Profile>).map((profileJson) => {
-            const profile = {
-              src: `/static/branding/about/${profileJson.name
-                .split(' ')
-                .map((x) => x.toLowerCase())
-                .join('-')}.png`,
-              ...profileJson,
-            };
-            return (
-              <Grid key={profile.name} item xs={12} sm={6} md={3}>
-                <Person {...profile} />
-              </Grid>
-            );
-          })}
-        </Grid>
       </Section>
       <Divider />
       {/* Community contributors */}
