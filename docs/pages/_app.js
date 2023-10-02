@@ -7,19 +7,12 @@ import PropTypes from 'prop-types';
 import { useRouter } from 'next/router';
 import { LicenseInfo } from '@mui/x-data-grid-pro';
 import materialPkgJson from 'packages/mui-material/package.json';
-import joyPkgJson from 'packages/mui-joy/package.json';
-import systemPkgJson from 'packages/mui-system/package.json';
-import basePkgJson from 'packages/mui-base/package.json';
-import generalDocsPages from 'docs/data/docs/pages';
-import basePages from 'docs/data/base/pages';
-import docsInfraPages from 'docs/data/docs-infra/pages';
 import materialPages from 'docs/data/material/pages';
-import joyPages from 'docs/data/joy/pages';
-import systemPages from 'docs/data/system/pages';
 import PageContext from 'docs/src/modules/components/PageContext';
 import GoogleAnalytics from 'docs/src/modules/components/GoogleAnalytics';
 import { CodeCopyProvider } from 'docs/src/modules/utils/CodeCopy';
-import { ThemeProvider } from 'docs/src/modules/components/ThemeContext';
+// import { ThemeProvider } from 'docs/src/modules/components/ThemeContext';
+import ThemeProvider from 'docs/src/theme';
 import { CodeVariantProvider } from 'docs/src/modules/utils/codeVariant';
 import { CodeStylingProvider } from 'docs/src/modules/utils/codeStylingSolution';
 import { UserLanguageProvider } from 'docs/src/modules/utils/i18n';
@@ -158,10 +151,10 @@ function AppWrapper(props) {
   const productIdentifier = React.useMemo(() => {
     const languagePrefix = pageProps.userLanguage === 'en' ? '' : `/${pageProps.userLanguage}`;
 
-    if (productId === 'material-ui') {
+    if (productId === 'bunbun') {
       return {
-        metadata: 'MUI Core',
-        name: 'Material UI',
+        metadata: 'BunBun',
+        name: 'BunBun',
         versions: [
           { text: `v${materialPkgJson.version}`, current: true },
           {
@@ -176,93 +169,11 @@ function AppWrapper(props) {
       };
     }
 
-    if (productId === 'joy-ui') {
-      return {
-        metadata: 'MUI Core',
-        name: 'Joy UI',
-        versions: [{ text: `v${joyPkgJson.version}`, current: true }],
-      };
-    }
-
-    if (productId === 'system') {
-      return {
-        metadata: 'MUI Core',
-        name: 'MUI System',
-        versions: [
-          { text: `v${systemPkgJson.version}`, current: true },
-          { text: 'v4', href: `https://v4.mui.com${languagePrefix}/system/basics/` },
-          {
-            text: 'View all versions',
-            href: `https://mui.com${languagePrefix}/versions/`,
-          },
-        ],
-      };
-    }
-
-    if (productId === 'base-ui') {
-      return {
-        metadata: 'MUI Core',
-        name: 'Base UI',
-        versions: [{ text: `v${basePkgJson.version}`, current: true }],
-      };
-    }
-
-    if (productId === 'core') {
-      return {
-        metadata: '',
-        name: 'MUI Core',
-        versions: [
-          { text: `v${materialPkgJson.version}`, current: true },
-          {
-            text: 'View all versions',
-            href: `https://mui.com${languagePrefix}/versions/`,
-          },
-        ],
-      };
-    }
-
-    if (productId === 'docs-infra') {
-      return {
-        metadata: '',
-        name: 'Docs-infra',
-        versions: [
-          {
-            text: 'v0.0.0',
-            href: `https://mui.com${languagePrefix}/versions/`,
-          },
-        ],
-      };
-    }
-
-    if (productId === 'docs') {
-      return {
-        metadata: '',
-        name: 'Home docs',
-        versions: [
-          {
-            text: 'v0.0.0',
-            href: `https://mui.com${languagePrefix}/versions/`,
-          },
-        ],
-      };
-    }
-
     return null;
   }, [pageProps.userLanguage, productId]);
 
   const pageContextValue = React.useMemo(() => {
-    let pages = generalDocsPages;
-    if (productId === 'base-ui') {
-      pages = basePages;
-    } else if (productId === 'material-ui') {
-      pages = materialPages;
-    } else if (productId === 'joy-ui') {
-      pages = joyPages;
-    } else if (productId === 'system') {
-      pages = systemPages;
-    } else if (productId === 'docs-infra') {
-      pages = docsInfraPages;
-    }
+    const pages = materialPages;
 
     const { activePage, activePageParents } = findActivePage(pages, router.pathname);
 
@@ -349,21 +260,3 @@ MyApp.getInitialProps = async ({ ctx, Component }) => {
     },
   };
 };
-
-// Track fraction of actual events to prevent exceeding event quota.
-// Filter sessions instead of individual events so that we can track multiple metrics per device.
-// See https://github.com/GoogleChromeLabs/web-vitals-report to use this data
-const disableWebVitalsReporting = Math.random() > 0.0001;
-export function reportWebVitals({ id, name, label, delta, value }) {
-  if (disableWebVitalsReporting) {
-    return;
-  }
-
-  window.gtag('event', name, {
-    value: delta,
-    metric_label: label === 'web-vital' ? 'Web Vitals' : 'Next.js custom metric',
-    metric_value: value,
-    metric_delta: delta,
-    metric_id: id, // id unique to current page load
-  });
-}

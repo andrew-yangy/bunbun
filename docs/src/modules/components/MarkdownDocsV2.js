@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import kebabCase from 'lodash/kebabCase';
 import { useTheme } from '@mui/system';
 import { exactProp } from '@mui/utils';
-import { CssVarsProvider as JoyCssVarsProvider, useColorScheme } from '@mui/joy/styles';
+import { useColorScheme } from '@mui/joy/styles';
 import ComponentsApiContent from 'docs/src/modules/components/ComponentsApiContent';
 import HooksApiContent from 'docs/src/modules/components/HooksApiContent';
 import { getTranslatedHeader as getComponentTranslatedHeader } from 'docs/src/modules/components/ApiPage';
@@ -60,7 +60,7 @@ export default function MarkdownDocsV2(props) {
 
   const { canonicalAs } = pathnameToLanguage(router.asPath);
   const {
-    disableAd = false,
+    disableAd = true,
     disableToc = false,
     demos = {},
     docs,
@@ -181,8 +181,7 @@ export default function MarkdownDocsV2(props) {
     });
   }
 
-  const isJoy = canonicalAs.startsWith('/joy-ui/');
-  const CssVarsProvider = isJoy ? JoyCssVarsProvider : React.Fragment;
+  const isJoy = true;
 
   const Wrapper = isJoy ? BrandingProvider : React.Fragment;
   const wrapperProps = {
@@ -257,15 +256,7 @@ export default function MarkdownDocsV2(props) {
             : `${AppFrameHeight}px`,
         }}
       >
-        {disableAd ? null : (
-          <BrandingProvider>
-            <AdGuest classSelector={hasTabs ? '.component-tabs' : undefined}>
-              <Ad />
-            </AdGuest>
-          </BrandingProvider>
-        )}
-        <CssVarsProvider>
-          {isJoy && <JoyModeObserver mode={theme.palette.mode} />}
+        <div>
           {commonElements}
           {activeTab === '' &&
             localizedDoc.rendered
@@ -301,7 +292,7 @@ export default function MarkdownDocsV2(props) {
               pagesContents={hooksApiPageContents}
             />
           )}
-        </CssVarsProvider>
+        </div>
       </div>
     </AppLayoutDocs>
   );

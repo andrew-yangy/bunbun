@@ -145,7 +145,7 @@ function shouldShowJobAd() {
 }
 
 const showSurveyBanner = false;
-const showJobAd = featureToggle.enable_job_banner && shouldShowJobAd();
+const showJobAd = false;
 
 export default function AppTableOfContents(props) {
   const { toc } = props;
@@ -235,7 +235,6 @@ export default function AppTableOfContents(props) {
 
   return (
     <Nav aria-label={t('pageTOC')}>
-      <TableOfContentsBanner />
       <NoSsr>
         {showSurveyBanner && (
           <Link
@@ -351,7 +350,6 @@ export default function AppTableOfContents(props) {
           </NavList>
         </React.Fragment>
       ) : null}
-      <DiamondSponsors />
     </Nav>
   );
 }

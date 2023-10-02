@@ -4,11 +4,19 @@ import KeyboardArrowRightRoundedIcon from '@mui/icons-material/KeyboardArrowRigh
 import { alpha, styled } from '@mui/material/styles';
 import Collapse from '@mui/material/Collapse';
 import Box from '@mui/material/Box';
-import Chip from '@mui/material/Chip';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import ListSubheader from '@mui/material/ListSubheader';
+import ListItemIcon from '@mui/material/ListItemIcon';
 import { samePageLinkNavigation } from 'docs/src/modules/components/MarkdownLinks';
 import Link from 'docs/src/modules/components/Link';
 import standardNavIcons from './AppNavIcons';
-
+import { useRouter } from "next/router";
+import Typography from '@mui/material/Typography';
+import NextLink from 'next/link';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 const Item = styled(
   function Item({ component: Component = 'div', ...props }) {
     return <Component {...props} />;
@@ -202,7 +210,7 @@ const ItemButtonIcon = styled(KeyboardArrowRightRoundedIcon, {
   },
 }));
 
-const StyledLi = styled('li', { shouldForwardProp: (prop) => prop !== 'depth' })(
+const StyledLi = styled('span', { shouldForwardProp: (prop) => prop !== 'depth' })(
   ({ theme, depth }) => ({
     display: 'block',
     padding: depth === 0 ? theme.spacing(1, '10px', 0, '10px') : 0,
@@ -288,6 +296,13 @@ export default function AppNavDrawerItem(props) {
     }
   };
 
+
+  const router = useRouter();
+  const pathname = typeof href === 'string' ? href : href?.pathname;
+  const routerPathname = router.pathname.replace('/[docsTab]', '');
+
+  const shouldBeActive = routerPathname === pathname;
+
   const hasIcon = icon && (typeof icon !== 'string' || !!standardNavIcons[icon]);
   const IconComponent = typeof icon === 'string' ? standardNavIcons[icon] : icon;
   const iconElement = hasIcon ? (
@@ -308,29 +323,42 @@ export default function AppNavDrawerItem(props) {
   return (
     <StyledLi {...other} depth={depth}>
       {/* Fix overloading with prefetch={false}, only prefetch on hover */}
-      <Item
-        component={subheader ? DeadLink : Link}
-        depth={depth}
-        hasIcon={hasIcon}
-        href={href}
-        prefetch={false}
-        subheader={subheader}
-        expandable={expandable}
-        activeClassName={initiallyExpanded ? null : 'app-drawer-active'}
-        className={topLevel ? 'algolia-lvl0' : null}
-        onClick={handleClick}
-        {...linkProps}
-      >
-        {iconElement}
-        {expandable && <ItemButtonIcon className="ItemButtonIcon" open={open} />}
-        {title}
-        {plan === 'pro' && <span className="plan-pro" title="Pro plan" />}
-        {plan === 'premium' && <span className="plan-premium" title="Premium plan" />}
-        {legacy && <Chip label="Legacy" sx={sxChip('warning')} />}
-        {newFeature && <Chip label="New" sx={sxChip('success')} />}
-        {planned && <Chip label="Planned" sx={sxChip('grey')} />}
-        {unstable && <Chip label="Preview" sx={sxChip('primary')} />}
-      </Item>
+      {/* eslint-disable-next-line no-nested-ternary */}
+      {expandable ? <ListItemButton onClick={handleClick}>
+        <ListItemIcon>
+          {open ? <ExpandLess /> : <ExpandMore />}
+        </ListItemIcon>
+        <Typography variant="h6">
+          {title}
+        </Typography>
+      </ListItemButton> : subheader ? <ListSubheader>{title}</ListSubheader> : <ListItemButton onClick={() => router.push(href)} selected={shouldBeActive}>
+        <ListItemText primary={title} />
+        <ChevronRightIcon fontSize="small" />
+      </ListItemButton>}
+
+      {/*<Item*/}
+      {/*  component={subheader ? DeadLink : Link}*/}
+      {/*  depth={depth}*/}
+      {/*  hasIcon={hasIcon}*/}
+      {/*  href={href}*/}
+      {/*  prefetch={false}*/}
+      {/*  subheader={subheader}*/}
+      {/*  expandable={expandable}*/}
+      {/*  activeClassName={initiallyExpanded ? null : 'app-drawer-active'}*/}
+      {/*  className={topLevel ? 'algolia-lvl0' : null}*/}
+      {/*  onClick={handleClick}*/}
+      {/*  {...linkProps}*/}
+      {/*>*/}
+      {/*  {iconElement}*/}
+      {/*  {expandable && <ItemButtonIcon className="ItemButtonIcon" open={open} />}*/}
+      {/*  {title}*/}
+      {/*  {plan === 'pro' && <span className="plan-pro" title="Pro plan" />}*/}
+      {/*  {plan === 'premium' && <span className="plan-premium" title="Premium plan" />}*/}
+      {/*  {legacy && <Chip label="Legacy" sx={sxChip('warning')} />}*/}
+      {/*  {newFeature && <Chip label="New" sx={sxChip('success')} />}*/}
+      {/*  {planned && <Chip label="Planned" sx={sxChip('grey')} />}*/}
+      {/*  {unstable && <Chip label="Preview" sx={sxChip('primary')} />}*/}
+      {/*</Item>*/}
       {expandable ? (
         <Collapse in={open} timeout="auto" unmountOnExit>
           {children}

@@ -56,7 +56,8 @@ function intToHex(int) {
  */
 export function decomposeColor(color) {
   // Idempotent
-  if (color.type) {
+  if (!color) return ;
+  if (color?.type) {
     return color;
   }
 
@@ -239,7 +240,7 @@ export function getContrastRatio(foreground, background) {
 export function alpha(color, value) {
   color = decomposeColor(color);
   value = clamp(value);
-
+  if (!color) return;
   if (color.type === 'rgb' || color.type === 'hsl') {
     color.type += 'a';
   }

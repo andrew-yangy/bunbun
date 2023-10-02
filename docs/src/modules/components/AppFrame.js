@@ -26,6 +26,7 @@ import PageContext from 'docs/src/modules/components/PageContext';
 import { useTranslate } from 'docs/src/modules/utils/i18n';
 import SvgMuiLogomark from 'docs/src/icons/SvgMuiLogomark';
 import AppFrameBanner from 'docs/src/components/banner/AppFrameBanner';
+import Image from 'next/image'
 
 const nProgressStart = debounce(() => {
   NProgress.start();
@@ -90,6 +91,7 @@ export function DeferredAppSearch() {
 const RootDiv = styled('div')(({ theme }) => {
   return {
     display: 'flex',
+    background: '#F5F5F5',
     ...theme.applyDarkStyles({
       background: (theme.vars || theme).palette.primaryDark[900],
     }),
@@ -113,10 +115,8 @@ const StyledAppBar = styled(AppBar, {
     }),
     boxShadow: 'none',
     backdropFilter: 'blur(8px)',
-    borderStyle: 'solid',
-    borderColor: (theme.vars || theme).palette.grey[100],
-    borderWidth: 0,
-    borderBottomWidth: 'thin',
+    borderBottom: '1px solid',
+    borderColor: '#ECECEC',
     backgroundColor: 'rgba(255,255,255,0.9)',
     color: (theme.vars || theme).palette.grey[800],
     ...theme.applyDarkStyles({
@@ -163,7 +163,6 @@ export default function AppFrame(props) {
   const t = useTranslate();
 
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [settingsOpen, setSettingsOpen] = React.useState(false);
 
   const { activePage } = React.useContext(PageContext);
 
@@ -200,30 +199,16 @@ export default function AppFrame(props) {
               aria-label={t('goToHome')}
               sx={{ display: { md: 'flex', lg: 'none' }, ml: 2 }}
             >
-              <SvgMuiLogomark width={30} />
+              <Image
+                src="/static/images/logo.png"
+                width={30}
+                height={30}
+              />
             </Box>
           </NextLink>
           <GrowingDiv />
           <Stack direction="row" spacing="10px">
-            <BannerComponent />
             <DeferredAppSearch />
-            <Tooltip title={t('appFrame.github')} enterDelay={300}>
-              <IconButton
-                component="a"
-                color="primary"
-                href={process.env.SOURCE_CODE_REPO}
-                data-ga-event-category="header"
-                data-ga-event-action="github"
-              >
-                <GitHubIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
-            <Notifications />
-            <Tooltip title={t('appFrame.toggleSettings')} enterDelay={300}>
-              <IconButton color="primary" onClick={() => setSettingsOpen(true)} sx={{ px: '8px' }}>
-                <SettingsIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>
           </Stack>
         </Toolbar>
       </StyledAppBar>
@@ -234,7 +219,6 @@ export default function AppFrame(props) {
         mobileOpen={mobileOpen}
       />
       {children}
-      <AppSettingsDrawer onClose={() => setSettingsOpen(false)} open={settingsOpen} />
     </RootDiv>
   );
 }

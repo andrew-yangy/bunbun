@@ -200,13 +200,14 @@ function DemoSandbox(props) {
 
   return (
     <DemoErrorBoundary name={name} onResetDemoClick={onResetDemoClick} t={t}>
-      {productId === 'joy-ui' ? (
-        children
-      ) : (
-        <StylesProvider jss={jss}>
-          <ThemeProvider theme={(outerTheme) => getTheme(outerTheme)}>{children}</ThemeProvider>
-        </StylesProvider>
-      )}
+      {/*{productId === 'joy-ui' ? (*/}
+      {/*  children*/}
+      {/*) : (*/}
+      {/*  <StylesProvider jss={jss}>*/}
+      {/*    <ThemeProvider theme={(outerTheme) => getTheme(outerTheme)}>{children}</ThemeProvider>*/}
+      {/*  </StylesProvider>*/}
+      {/*)}*/}
+      {children}
     </DemoErrorBoundary>
   );
 }

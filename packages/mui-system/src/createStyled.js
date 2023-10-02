@@ -158,22 +158,22 @@ export default function createStyled(input = {}) {
       ...options,
     });
     const muiStyledResolver = (styleArg, ...expressions) => {
-      const expressionsWithDefaultTheme = expressions
-        ? expressions.map((stylesArg) => {
-            // On the server Emotion doesn't use React.forwardRef for creating components, so the created
-            // component stays as a function. This condition makes sure that we do not interpolate functions
-            // which are basically components used as a selectors.
-            return typeof stylesArg === 'function' && stylesArg.__emotion_real !== stylesArg
-              ? (props) => {
-                  return stylesArg({
-                    ...props,
-                    theme: resolveTheme({ ...props, defaultTheme, themeId }),
-                  });
-                }
-              : stylesArg;
-          })
-        : [];
-
+      // const expressionsWithDefaultTheme = expressions
+      //   ? expressions.map((stylesArg) => {
+      //       // On the server Emotion doesn't use React.forwardRef for creating components, so the created
+      //       // component stays as a function. This condition makes sure that we do not interpolate functions
+      //       // which are basically components used as a selectors.
+      //       return typeof stylesArg === 'function' && stylesArg.__emotion_real !== stylesArg
+      //         ? (props) => {
+      //             return stylesArg({
+      //               ...props,
+      //               theme: resolveTheme({ ...props, defaultTheme, themeId }),
+      //             });
+      //           }
+      //         : stylesArg;
+      //     })
+      //   : [];
+      const expressionsWithDefaultTheme = []
       let transformedStyleArg = styleArg;
 
       if (componentName && overridesResolver) {

@@ -21,6 +21,7 @@ import { pageToTitleI18n } from 'docs/src/modules/utils/helpers';
 import PageContext from 'docs/src/modules/components/PageContext';
 import { useTranslate } from 'docs/src/modules/utils/i18n';
 import MuiProductSelector from 'docs/src/modules/components/MuiProductSelector';
+import Image from "next/image";
 
 // TODO: Collapse should expose an API to customize the duration based on the height.
 function transitionTheme(theme) {
@@ -109,14 +110,14 @@ ProductDrawerButton.propTypes = {
 };
 
 function ProductIdentifier(props) {
-  const { name, metadata, versionSelector } = props;
+  const { metadata } = props;
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Typography
         sx={(theme) => ({
           ml: 1,
           color: (theme.vars || theme).palette.grey[600],
-          fontSize: theme.typography.pxToRem(11),
+          fontSize: theme.typography.pxToRem(16),
           fontWeight: 700,
           textTransform: 'uppercase',
           letterSpacing: '.08rem',
@@ -124,18 +125,12 @@ function ProductIdentifier(props) {
       >
         {metadata}
       </Typography>
-      <Box sx={{ display: 'flex' }}>
-        <ProductDrawerButton productName={name} />
-        {versionSelector}
-      </Box>
     </Box>
   );
 }
 
 ProductIdentifier.propTypes = {
   metadata: PropTypes.string,
-  name: PropTypes.string.isRequired,
-  versionSelector: PropTypes.element.isRequired,
 };
 
 // To match scrollMarginBottom
@@ -319,85 +314,6 @@ export default function AppNavDrawer(props) {
 
   const drawer = React.useMemo(() => {
     const navItems = renderNavItems({ onClose, pages, activePageParents, depth: 0, t });
-
-    const renderVersionSelector = (versions, sx) => {
-      if (!versions?.length) {
-        return null;
-      }
-
-      const currentVersion = versions.find((version) => version.current) || versions[0];
-      return (
-        <React.Fragment>
-          <Button
-            id="mui-version-selector"
-            onClick={(event) => {
-              setAnchorEl(event.currentTarget);
-            }}
-            endIcon={
-              versions.length > 1 ? (
-                <ArrowDropDownRoundedIcon fontSize="small" sx={{ ml: -0.5 }} />
-              ) : null
-            }
-            sx={[
-              (theme) => ({
-                py: 0.1,
-                minWidth: 0,
-                fontSize: theme.typography.pxToRem(13),
-                fontWeight: 500,
-                color: (theme.vars || theme).palette.primary[600],
-                '& svg': {
-                  ml: -0.6,
-                  width: 18,
-                  height: 18,
-                },
-                ...theme.applyDarkStyles({
-                  color: (theme.vars || theme).palette.primary[300],
-                }),
-              }),
-              ...(Array.isArray(sx) ? sx : [sx]),
-            ]}
-          >
-            {currentVersion.text}
-          </Button>
-          <Menu
-            id="mui-version-menu"
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={() => setAnchorEl(null)}
-          >
-            {versions.map((item) => {
-              if (item.text === 'View all versions') {
-                return [
-                  <Divider key="divider" />,
-                  <MenuItem key="all-versions" component="a" href={item.href} onClick={onClose}>
-                    {/* eslint-disable-next-line material-ui/no-hardcoded-labels -- version string is untranslatable */}
-                    {`View all versions`}
-                  </MenuItem>,
-                ];
-              }
-              return (
-                <MenuItem
-                  key={item.text}
-                  {...(item.current
-                    ? {
-                        selected: true,
-                        onClick: () => setAnchorEl(null),
-                      }
-                    : {
-                        component: 'a',
-                        href: item.href,
-                        onClick: onClose,
-                      })}
-                >
-                  {item.text} {item.current && <DoneRounded sx={{ fontSize: 16, ml: 0.25 }} />}
-                </MenuItem>
-              );
-            })}
-          </Menu>
-        </React.Fragment>
-      );
-    };
-
     return (
       <React.Fragment>
         <ToolbarDiv>
@@ -413,28 +329,28 @@ export default function AppNavDrawer(props) {
                 borderColor: 'divider',
               }}
             >
-              <SvgMuiLogomark width={30} />
+              <Image
+                src="/static/images/logo.png"
+                width={50}
+                height={50}
+                style={{
+                  borderRadius: 12
+                }}
+              />
             </Box>
           </NextLink>
           <ProductIdentifier
             name={productIdentifier.name}
             metadata={productIdentifier.metadata}
-            versionSelector={renderVersionSelector(productIdentifier.versions)}
           />
         </ToolbarDiv>
-        <Divider />
         <Box
           sx={{
             pt: 0.5,
             pb: 5,
             overflowY: 'auto',
+            borderTop: '1px solid #ECECEC',
             flexGrow: 1,
-            ...(swipeableDrawer
-              ? {}
-              : {
-                  borderRight: '1px solid',
-                  borderColor: 'divider',
-                }),
           }}
         >
           <PersistScroll slot="side" enabled>

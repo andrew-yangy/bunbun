@@ -2,6 +2,7 @@ import { pathnameToLanguage } from 'docs/src/modules/utils/helpers';
 
 export type MuiProductId =
   | 'null'
+  | 'bunbun'
   | 'base-ui'
   | 'material-ui'
   | 'joy-ui'
@@ -32,6 +33,7 @@ export default function getProductInfoFromUrl(asPath: string): MuiProductInfo {
   let productId = 'null';
 
   if (
+    firstFolder === 'bunbun' ||
     firstFolder === 'material-ui' ||
     firstFolder === 'joy-ui' ||
     firstFolder === 'base-ui' ||

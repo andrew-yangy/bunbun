@@ -119,8 +119,8 @@ export default function AppLayoutDocs(props) {
 
   const { canonicalAs } = pathnameToLanguage(router.asPath);
   let productName = 'MUI';
-  if (canonicalAs.startsWith('/material-ui/')) {
-    productName = 'Material UI';
+  if (canonicalAs.startsWith('/bunbun/')) {
+    productName = 'BunBun';
   } else if (canonicalAs.startsWith('/base-ui/')) {
     productName = 'Base UI';
   } else if (canonicalAs.startsWith('/x/')) {

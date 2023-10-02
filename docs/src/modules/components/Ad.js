@@ -111,6 +111,7 @@ export const AD_MARGIN_BOTTOM = 3;
 export const AD_HEIGHT = 126;
 
 export default function Ad() {
+  return ;
   const [adblock, setAdblock] = React.useState(null);
   const [carbonOut, setCarbonOut] = React.useState(null);
 

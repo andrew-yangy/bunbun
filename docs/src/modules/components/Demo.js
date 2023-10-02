@@ -465,7 +465,7 @@ export default function Demo(props) {
   const adVisibility = showAd && !disableAd && !demoOptions.disableAd;
 
   const DemoRoot = demoData.productId === 'joy-ui' ? DemoRootJoy : DemoRootMaterial;
-  const Wrapper = demoData.productId === 'joy-ui' ? BrandingProvider : React.Fragment;
+  const Wrapper = BrandingProvider;
 
   const isPreview = !codeOpen && showPreview;
 

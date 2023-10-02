@@ -32,6 +32,7 @@ const defaultPackageNames = {
 };
 
 export default function ComponentLinkHeader(props) {
+  return ;
   const {
     markdown: { headers },
     design,
